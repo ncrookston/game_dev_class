@@ -2,8 +2,9 @@
 <html ng-app="cs_game">
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
-    <script src="game_loop.js"></script>
-    <script src="game_engine.js"></script>
+    <script src="scripts/game_loop.js"></script>
+    <script src="scripts/game_engine.js"></script>
+
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body ng-controller="game_control">
@@ -12,7 +13,7 @@
     <div id="mainframe">
       <div id="console">
         <ul>
-          <li ng-repeat="message in messages | filter:onMessageTime">
+          <li ng-repeat="message in messages">
             Timer: {{message.name}} &ndash; {{message.remaining}} times left
           </li>
         </ul>
@@ -21,11 +22,11 @@
       <form class="inputs" ng-submit="addTimer()" name="timer_form">
         <div>
           <label>Name:</label>
-          <input name="input1" type="text" ng-model="timer.name" required>
+          <input type="text" ng-model="timer.name" required>
         </div>
         <div>
           <label>Interval:</label>
-          <input type="number" ng-model="timer.repeat_interval" required min="0">
+          <input type="text" ng-model="timer.repeat_interval" ng-pattern="/^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/">
         </div>
         <div>
           <label># Times:</label>
@@ -39,5 +40,6 @@
     </div>
     <div id="footer">Created for CS 5410</div>
     <div>Average frames per second: {{ fps }}</div>
+
   </body>
 </html>

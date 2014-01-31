@@ -9,15 +9,15 @@ var game1 = angular.module('cs_game', ['nrc_game'])
       $scope.messages = [];
 
       var timers = [];
+      var unreadyMsgs = [];
       var numVisits = 0;
       var startTime = performance.now();
 
-      $scope.onMessageTime = function(message) {
-        return message.displayTime <= $scope.currTime;
-      };
-
       $scope.addTimer = function() {
         timers.push($scope.timer);
+        //Clear out the model, so setPristine blanks everything out.
+        $scope.timer = undefined;
+        $scope.timer_form.$setPristine();
       };
 
       var input = function() {
@@ -26,7 +26,6 @@ var game1 = angular.module('cs_game', ['nrc_game'])
 
       var update = function(currTime) {
 
-        $scope.currTime = currTime;
         numVisits++;
 
         $scope.fps = numVisits
@@ -34,15 +33,22 @@ var game1 = angular.module('cs_game', ['nrc_game'])
 
         timers.forEach(function(timer) {
           for (var i = 0; i < timer.repeat_count; i++) {
-            $scope.messages.push(
+            unreadyMsgs.push(
             {
               name: timer.name,
               displayTime: currTime + timer.repeat_interval * 1000 * i,
-              remaining: timer.repeat_count - i
+              remaining: timer.repeat_count - 1 - i
             });
           }
         });
         timers.length = 0;
+
+        function isReadyTime(msg) { return msg.displayTime <= currTime; };
+
+        [].push.apply($scope.messages, unreadyMsgs.filter(isReadyTime));
+
+        unreadyMsgs = unreadyMsgs.filter(
+            function(msg) { return !isReadyTime(msg); });
       };
 
       //Once input has substance then generate a function which calls it first.

@@ -48,6 +48,7 @@ form.inputs div { display: table-row; }
 
 .inputs div input 
 {
+  border: 1px solid black;
   width: 75%;
   text-align: left;
 }
@@ -56,8 +57,4 @@ input.submit
 {
   text-align: center;
 }
-
-input.ng-invalid { border: 1px solid red; }
-input.ng-valid { border: 1px solid green; }
-
 
